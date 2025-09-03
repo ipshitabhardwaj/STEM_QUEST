@@ -1,8 +1,11 @@
-// script.js - prototype frontend (works without a backend; will use API if available)
-
 // small helper selectors
 const $ = (id) => document.getElementById(id);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+// redirect to signup if not logged in
+if (!localStorage.getItem('username') && window.location.pathname.includes('web.html')) {
+  window.location.href = 'signup.html';
+}
 
 const API = 'http://localhost:3000'; // optional backend
 let demoQuests = [
@@ -244,15 +247,15 @@ function initPage(){
   initQuiz();
   renderProgressCharts();
 
-  // ----- Logout
+ // ----- Logout
 const logoutBtn = $('logout-btn');
 if (logoutBtn) {
   logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem('username');
-    localStorage.removeItem('email');
-    window.location.href = 'signup.html';
+    localStorage.clear(); // clears all stored data
+    window.location.replace('signup.html'); // immediate redirect
   });
 }
+
 
   // library search/filters already wired
   // tab toggle (overview/recs)
@@ -294,4 +297,5 @@ if (logoutBtn) {
 
 // run init when DOM ready
 document.addEventListener('DOMContentLoaded', initPage);
+
 
