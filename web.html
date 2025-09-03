@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>STEM Quest</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#top" class="brand">
+        <span class="logo">🎮</span>
+        <span class="brand-text">STEM Quest</span>
+      </a>
+      <nav class="nav">
+        <a href="#dashboard">Dashboard</a>
+        <a href="#library">Library</a>
+        <a href="#game">Game</a>
+        <a href="#progress">Progress</a>
+        <a href="#admin">Admin</a>
+        <a href="#leaderboard">Leaderboard</a>
+      </nav>
+      <div class="header-actions">
+        <select id="lang-select" aria-label="Language">
+          <option value="en">English</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+          <option value="de">Deutsch</option>
+          <option value="hi">हिंदी</option>
+          <option value="zh">中文</option>
+        </select>
+        <a href="#progress" class="btn btn-primary btn-sm">My Progress</a>
+        <button id="logout-btn" class="btn btn-alt btn-sm">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="container">
+    <!-- Hero / Onboarding -->
+    <section class="hero" id="hero">
+      <div class="hero-badge">✨ Learn STEM through play</div>
+      <h1 class="hero-title">A gamified STEM platform for curious minds</h1>
+      <p class="hero-sub">Personalized learning paths, interactive games, and real-time progress tracking for students and educators.</p>
+      <div class="hero-actions">
+        <a href="#dashboard" class="btn btn-primary btn-lg">▶ Start Learning</a>
+        <label class="select-wrap">
+          <span class="icon">🌐</span>
+          <select id="lang-select-hero" aria-label="Language">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="hi">हिंदी</option>
+            <option value="zh">中文</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="grid-3 gap" aria-label="Key features">
+      <div class="card">
+        <div class="card-body">
+          <div class="feature">
+            <span class="check">✔</span>
+            <div>
+              <h3>Personalized Paths</h3>
+              <p>Adaptive learning tailored to grade and skill level.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="feature">
+            <span class="check">✔</span>
+            <div>
+              <h3>Interactive Games</h3>
+              <p>Puzzles, quests, and quizzes that make learning fun.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="feature">
+            <span class="check">✔</span>
+            <div>
+              <h3>Secure & Safe</h3>
+              <p>Privacy-first design built for classrooms and families.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard -->
+    <section id="dashboard" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Welcome back <span id="user-display">(demo)</span></h2>
+          <p class="muted">Your personalized STEM learning hub</p>
+        </div>
+        <a href="#library" class="btn">Browse Library</a>
+      </div>
+
+      <div class="grid-3 gap">
+        <div class="card">
+          <div class="card-head"><h3>Learning Path</h3></div>
+          <div class="card-body space">
+            <div>
+              <div class="row between small">
+                <span>Grade 6 • Physics Basics</span><span class="muted">60%</span>
+              </div>
+              <div class="progress"><div style="width:60%"></div></div>
+            </div>
+            <div>
+              <div class="row between small">
+                <span>Math • Fractions & Ratios</span><span class="muted">40%</span>
+              </div>
+              <div class="progress"><div style="width:40%"></div></div>
+            </div>
+            <div>
+              <div class="row between small">
+                <span>Coding • Scratch to Python</span><span class="muted">25%</span>
+              </div>
+              <div class="progress"><div style="width:25%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Achievements</h3></div>
+          <div class="card-body badges">
+            <span class="badge">Quiz Whiz</span>
+            <span class="badge badge-alt">Algebra Ace</span>
+            <span class="badge badge-outline">Physics Pro</span>
+            <span class="badge">Coding Cadet</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>New Challenges</h3></div>
+          <div class="card-body space" id="challenges-list">
+            <!-- populated by script -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Village Stats Card -->
+      <div class="grid-4 gap village-stats card mt">
+        <div class="card-body space">
+          <div class="row between"><span>Bricks 🧱</span><strong id="bricks-count">0</strong></div>
+          <div class="row between"><span>Energy Units ⚡</span><strong id="energy-count">0</strong></div>
+          <div class="row between"><span>Materials 🛠️</span><strong id="materials-count">0</strong></div>
+          <div class="row between"><span>Eco Points 🌿</span><strong id="eco-count">0</strong></div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <div class="tablist" role="tablist">
+          <button class="tab active" data-tab="overview">Overview</button>
+          <button class="tab" data-tab="recs">Recommendations</button>
+        </div>
+        <div class="tabpanel active" id="tab-overview">
+          <div class="grid-2 gap">
+            <div class="card">
+              <div class="card-head"><h3>Next Up</h3></div>
+              <div class="card-body space small">
+                <div class="row between"><span>Forces & Motion: Level 3</span><a href="#game" class="btn btn-sm btn-alt">Resume</a></div>
+                <div class="row between"><span>Ratios in Real Life</span><a href="#game" class="btn btn-sm btn-alt">Start</a></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h3>Quick Practice</h3></div>
+              <div class="card-body space small">
+                <div class="row between"><span>3-Minute Math Sprint</span><a href="#game" class="btn btn-sm btn-alt">Play</a></div>
+                <div class="row between"><span>Physics Pop Quiz</span><a href="#game" class="btn btn-sm btn-alt">Play</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tabpanel" id="tab-recs">
+          <div class="card"><div class="card-body">
+            Based on your progress, we recommend starting "Ratios in Real Life" and continuing "Forces & Motion: Level 3".
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Library -->
+    <section id="library" class="section">
+      <div class="section-head">
+        <div>
+          <h2>STEM Content Library</h2>
+          <p class="muted">Browse topics, games, and modules by subject and grade level</p>
+        </div>
+        <a href="#dashboard" class="btn btn-alt">Back to Dashboard</a>
+      </div>
+
+      <div class="filters card">
+        <div class="card-body grid-4 gap">
+          <label class="search">
+            <span class="icon">🔎</span>
+            <input id="q" type="search" placeholder="Search topics, tags, or modules" />
+          </label>
+          <label>
+            <span class="label">Subject</span>
+            <select id="subject">
+              <option value="all">all</option>
+              <option>Math</option>
+              <option>Physics</option>
+              <option>Chemistry</option>
+              <option>Biology</option>
+              <option>Coding</option>
+            </select>
+          </label>
+          <label>
+            <span class="label">Grade</span>
+            <select id="grade">
+              <option value="all">all</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div id="library-list" class="grid-3 gap cards"></div>
+    </section>
+
+    <!-- Game -->
+    <section id="game" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Interactive Game</h2>
+          <p class="muted">Answer questions and earn badges</p>
+        </div>
+        <a href="#library" class="btn btn-alt">Back to Library</a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="row between small muted"><span>🎮 Quiz Mode</span><span>🏆 Score <span id="score">0</span>/<span id="total">0</span></span></div>
+          <div class="progress mt"><div id="game-progress" style="width:0%"></div></div>
+          <div id="question" class="h3 mt">Question text</div>
+          <div id="options" class="options mt"></div>
+          <div class="row gap mt">
+            <button id="submit" class="btn btn-primary" disabled>Check Answer</button>
+            <button id="clear" class="btn btn-alt" disabled>Clear</button>
+          </div>
+          <div id="result" class="mt"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Progress -->
+    <section id="progress" class="section">
+      <h2>Progress & Achievements</h2>
+      <div class="grid-2 gap">
+        <div class="card">
+          <div class="card-head"><h3>Weekly Learning Minutes</h3></div>
+          <div class="card-body">
+            <div id="minutes-chart" class="bars" aria-label="Bar chart"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Quiz Accuracy</h3></div>
+          <div class="card-body">
+            <svg id="accuracy-chart" viewBox="0 0 300 160" class="line-chart" aria-label="Line chart"></svg>
+          </div>
+        </div>
+      </div>
+      <div class="badges mt">
+        <span class="badge">Quiz Whiz</span>
+        <span class="badge badge-alt">Algebra Ace</span>
+        <span class="badge badge-outline">Physics Pro</span>
+      </div>
+    </section>
+
+    <!-- Admin -->
+    <section id="admin" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Teacher/Admin Dashboard</h2>
+          <p class="muted">Monitor student progress, assign content, and manage users</p>
+        </div>
+        <a href="#library" class="btn">Assign Content</a>
+      </div>
+      <div class="grid-3 gap">
+        <div class="card">
+          <div class="card-head"><h3>Class Overview</h3></div>
+          <div class="card-body small space">
+            <div class="row between"><span>Students</span><strong>24</strong></div>
+            <div class="row between"><span>Average Score</span><strong>82%</strong></div>
+            <div class="row between"><span>Active Quests</span><strong>7</strong></div>
+          </div>
+        </div>
+        <div class="card col-span-2">
+          <div class="card-head"><h3>Students</h3></div>
+          <div class="card-body">
+            <table class="table">
+              <thead><tr><th>Name</th><th>Grade</th><th>Current Quest</th><th class="right">Progress</th></tr></thead>
+              <tbody id="students"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card mt">
+        <div class="card-head"><h3>Assign Content</h3></div>
+        <div class="card-body grid-3 gap">
+          <label><span class="label">Group</span>
+            <select id="assign-group"><option value="g5">Grade 5</option><option value="g6" selected>Grade 6</option><option value="g7">Grade 7</option></select>
+          </label>
+          <label><span class="label">Module</span>
+            <select id="assign-module"><option value="forces">Forces & Motion</option><option value="ratios" selected>Ratios in Real Life</option><option value="fractions">Fraction Frenzy</option></select>
+          </label>
+          <button id="assign-btn" class="btn btn-primary">Assign Now</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leaderboard -->
+    <section id="leaderboard" class="section">
+      <div class="section-head">
+        <div>
+          <h2>🏆 Leaderboard</h2>
+          <p class="muted">Top players ranked by resources & buildings</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Username</th>
+                <th>Total Resources</th>
+                <th>Buildings</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container row between wrap small">
+      <span>© <span id="year"></span> STEM Quest. All rights reserved.</span>
+      <span class="muted">Learn through play: Science • Technology • Engineering • Math</span>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+  <script>
+  // Display logged-in username
+  (function() {
+    const username = localStorage.getItem('username');
+    if (username) {
+      // Update dashboard greeting
+      const displayEl = document.getElementById('user-display');
+      if (displayEl) displayEl.textContent = username;
+
+      // Optionally update header brand to greet user
+      const brandEl = document.querySelector('.brand-text');
+      if (brandEl) brandEl.textContent = `STEM Quest • Hello, ${username}!`;
+    }
+  })();
+
+  // Logout button functionality
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('username'); // remove local login
+      window.location.reload(); // reload page to reset view
+    });
+  }
+</script>
+
+</body>
+</html>
