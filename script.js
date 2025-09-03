@@ -244,6 +244,16 @@ function initPage(){
   initQuiz();
   renderProgressCharts();
 
+  // ----- Logout
+const logoutBtn = $('logout-btn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('username');
+    localStorage.removeItem('email');
+    window.location.href = 'signup.html';
+  });
+}
+
   // library search/filters already wired
   // tab toggle (overview/recs)
   $$('.tab').forEach(btn => btn.addEventListener('click', ()=>{
@@ -284,3 +294,4 @@ function initPage(){
 
 // run init when DOM ready
 document.addEventListener('DOMContentLoaded', initPage);
+
