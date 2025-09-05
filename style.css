@@ -788,3 +788,75 @@ body {
   position: relative;
   z-index: 1; /* keeps text above overlay */
 }
+.scroll-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #8B4513; /* brown */
+  color: white; /* arrow color stays white for contrast */
+  border: none;
+  padding: 10px 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  display: none;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.scroll-top:hover {
+  background-color: #A0522D; /* slightly lighter brown on hover */
+}
+/* General mobile tweaks */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  .row {
+    flex-direction: column; /* stack rows vertically */
+    gap: 8px;
+  }
+
+  .card {
+    width: 100%; /* full width on small screens */
+    margin-bottom: 16px;
+  }
+
+  .row.wrap {
+    flex-wrap: wrap;
+  }
+
+  .row.wrap span, .row.wrap .badge {
+    margin-bottom: 4px;
+  }
+
+  #options .btn {
+    width: 100%; /* options take full width */
+    margin-bottom: 8px;
+  }
+
+  .hero-actions a, .btn {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  table, tbody, tr, td {
+    display: block; /* stack leaderboard/admin table */
+    width: 100%;
+  }
+
+  tr {
+    margin-bottom: 12px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  td {
+    text-align: left;
+    padding: 6px 0;
+  }
+
+  .progress {
+    width: 100%;
+  }
+}
