@@ -160,3 +160,14 @@ body {
 .small {
   font-size: 14px;
 }
+body {
+  background: url('assets/sky.png') no-repeat center center fixed;
+  background-size: cover;
+}
+.signup-form {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  margin: auto;
+}
