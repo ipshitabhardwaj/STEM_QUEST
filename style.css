@@ -860,3 +860,77 @@ body {
     width: 100%;
   }
 }
+
+/* Make main containers responsive */
+body, .container, .card, .challenge {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 1rem;
+}
+
+/* Adjust text sizes for small screens */
+@media (max-width: 768px) {
+  h1, h2, h3, .title {
+    font-size: 1.2rem;  /* smaller headings */
+  }
+  p, .muted {
+    font-size: 0.9rem;
+  }
+}
+
+/* Make cards stack vertically */
+@media (max-width: 768px) {
+  .card {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Buttons full width on mobile */
+@media (max-width: 768px) {
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Adjust library filter inputs */
+@media (max-width: 768px) {
+  #q, #subject, #grade {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  .row.wrap.small {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+}
+
+/* Leaderboard table scroll */
+@media (max-width: 768px) {
+  table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+  }
+  th, td {
+    white-space: nowrap;
+  }
+}
+
+/* Progress bars & charts */
+@media (max-width: 768px) {
+  #minutes-chart .bar {
+    width: 12%;  /* smaller bars */
+  }
+  svg#accuracy-chart {
+    width: 100%;
+    height: auto;
+  }
+}
+.badge {
+  flex-wrap: wrap;
+  margin-bottom: 0.2rem;
+}
+.row.gap.mt {
+  flex-direction: column;
+}
