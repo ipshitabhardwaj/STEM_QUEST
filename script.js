@@ -29,6 +29,14 @@ const demoLeaderboard = [
   { username:'demo', totalResources:50, buildings:2 },
 ];
 
+// Achievements demo
+const demoAchievements = [
+  { name: 'Quiz Whiz', earned: true },
+  { name: 'Algebra Ace', earned: true },
+  { name: 'Physics Pro', earned: true },
+  { name: 'Coding Cadet', earned: false },
+];
+
 // ensure a demo username exists so prototype doesn't redirect
 if (!localStorage.getItem('username')) localStorage.setItem('username','demo');
 const currentUser = localStorage.getItem('username');
@@ -37,7 +45,7 @@ if ($('year')) $('year').textContent = new Date().getFullYear();
 
 // ----- Navigation: smooth anchor behavior for header nav
 $$('.nav a, .hero-actions a, .section-head a, .challenge a, .badges a').forEach(a=>{
-  a.addEventListener('click', (ev)=> {
+  a.addEventListener('click', (ev)=>{
     const href = a.getAttribute('href') || '';
     if (href.startsWith('#')) {
       ev.preventDefault();
@@ -61,16 +69,13 @@ function renderLibrary(items) {
       </div>
     </div>
   `).join('');
-  // attach start-quest click handlers
   $$('.start-quest').forEach(btn=> btn.addEventListener('click', (e)=>{
     const id = btn.dataset.id;
-    // prefill a quest choice — for prototype just scroll to game and start quiz
     document.querySelector('#game')?.scrollIntoView({behavior:'smooth'});
   }));
 }
 
 function loadLibraryFromAPI(){
-  // attempt API, fallback to demo
   fetch(`${API}/quests`).then(r=>r.json()).then(data=>{
     if (Array.isArray(data) && data.length) renderLibrary(data);
     else renderLibrary(demoQuests);
@@ -151,6 +156,15 @@ function loadVillageFromAPI(){
   }).catch(()=> renderVillage({bricks:0,energyUnits:0,materials:0,ecoPoints:0}));
 }
 
+// ----- Achievements (capsules)
+function renderAchievements(list) {
+  const container = $('achievements-list');
+  if (!container) return;
+  container.innerHTML = list.map(a => `
+    <span class="badge capsule ${a.earned ? 'earned' : 'locked'}">${a.name}</span>
+  `).join('');
+}
+
 // ----- Quiz (interactive game)
 const QUESTIONS = [
   { q:'A bridge stays up because forces are...', options:['Unbalanced','Balanced','Random'], correct:1 },
@@ -180,7 +194,6 @@ function renderQ(){
     $('options').innerHTML = `<div class="muted">You scored ${qScore} out of ${QUESTIONS.length}.</div>`;
     $('submit').disabled = true; $('clear').disabled = true;
     $('game-progress').style.width = '100%';
-    // pretend reward (no API required)
     if (qScore >= Math.ceil(QUESTIONS.length*0.7)){
       setTimeout(()=> alert('🎉 Congrats — you earned a village reward!'), 300);
     }
@@ -216,7 +229,6 @@ function renderProgressCharts(){
     const h = Math.round((d.minutes/maxMin)*100);
     return `<div class="bar" style="height:${h}%" data-label="${d.day}"></div>`;
   }).join('');
-  // accuracy chart (svg polyline)
   const svg = $('accuracy-chart');
   if (svg) {
     const w = 300, h = 160, pad=20;
@@ -224,7 +236,6 @@ function renderProgressCharts(){
     const xs = WEEKLY.map((_,i)=> pad + i*((w-2*pad)/(WEEKLY.length-1)) );
     const ys = WEEKLY.map(d=> h-pad - (d.accuracy/100)*(h-2*pad) );
     const pts = xs.map((x,i)=> `${x},${ys[i]}`).join(' ');
-    // clear previous
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     const ns = 'http://www.w3.org/2000/svg';
     const poly = document.createElementNS(ns,'polyline');
@@ -238,27 +249,25 @@ function renderProgressCharts(){
 
 // ----- Page initialization
 function initPage(){
-  // render core content (use API if available)
   loadLibraryFromAPI();
   renderChallenges(demoQuests);
   renderStudents(demoStudents);
   loadLeaderboardFromAPI();
   loadVillageFromAPI();
+  renderAchievements(demoAchievements);
   initQuiz();
   renderProgressCharts();
 
- // ----- Logout
-const logoutBtn = $('logout-btn');
-if (logoutBtn) {
-  logoutBtn.addEventListener('click', () => {
-    localStorage.clear(); // clears all stored data
-    window.location.replace('signup.html'); // immediate redirect
-  });
-}
+  // Logout
+  const logoutBtn = $('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      localStorage.clear();
+      window.location.replace('signup.html');
+    });
+  }
 
-
-  // library search/filters already wired
-  // tab toggle (overview/recs)
+  // tab toggle
   $$('.tab').forEach(btn => btn.addEventListener('click', ()=>{
     $$('.tab').forEach(b=>b.classList.toggle('active', b===btn));
     $$('.tabpanel').forEach(p=>p.classList.remove('active'));
@@ -283,10 +292,8 @@ if (logoutBtn) {
     selects.forEach(x=> x.value = e.target.value);
   }));
 
-  // populate library search placeholder with event
   $$('#library-list .card').length && applyFilters();
 
-  // If user wants to click Start Learning in hero, scroll to dashboard
   $$('.hero-actions a[href="#dashboard"]').forEach(a=>{
     a.addEventListener('click', (ev)=>{
       ev.preventDefault();
@@ -297,5 +304,3 @@ if (logoutBtn) {
 
 // run init when DOM ready
 document.addEventListener('DOMContentLoaded', initPage);
-
-
