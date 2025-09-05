@@ -73,3 +73,14 @@ body {
 
 .footer { border-top: 1px solid hsl(var(--border)); padding: 16px 0; text-align: center; font-size: 14px;
   color: hsl(var(--muted)); }
+body {
+  background: url('assets/sky.png') no-repeat center center fixed;
+  background-size: cover;
+}
+.login-form {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  margin: auto;
+}
