@@ -499,3 +499,292 @@ body {
 #leaderboard td {
   font-size: 14px;
 }
+
+/* Achievements Capsules */
+.badges .badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  border-radius: 999px;   /* pill shape */
+  font-size: 13px;
+  font-weight: 500;
+  margin: 4px;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.badges .badge:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: hsl(var(--secondary));
+}
+
+/* -------------------------------
+   GLOBAL STYLES ✨
+   ------------------------------- */
+body {
+  margin: 0;
+  font-family: 'Orbitron', Inter, system-ui, sans-serif;
+  color: #fff;
+
+  /* grass background */
+  background: url("assets/grass.jpg") center/cover no-repeat fixed;
+}
+
+/* -------------------------------
+   MAIN WRAPPER
+   ------------------------------- */
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 2rem;
+}
+
+/* -------------------------------
+   ACHIEVEMENTS CAPSULES
+   ------------------------------- */
+.achievements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.achievement {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  background: rgba(0, 0, 0, 0.5); /* semi-transparent overlay */
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 9999px; /* capsule */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.achievement:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
+}
+
+.achievement img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* -------------------------------
+   CARD STYLE (wood background)
+   ------------------------------- */
+.card {
+  background: url("assets/wood-tile.png") center/cover repeat;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+  color: #fff;
+}
+/* -------------------------------
+   ACHIEVEMENTS BADGE CAPSULES ✨
+   ------------------------------- */
+.achievements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.achievement {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1.6rem;
+  background: rgba(255, 255, 255, 0.1); /* frosted glass effect */
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 9999px; /* capsule */
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.5), 
+    inset 0 1px 4px rgba(255, 255, 255, 0.3);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #fff;
+  backdrop-filter: blur(6px) saturate(140%);
+  -webkit-backdrop-filter: blur(6px) saturate(140%);
+  transition: transform 0.25s ease, box-shadow 0.3s ease, background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* glowing highlight effect */
+.achievement::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.25), transparent 70%);
+  transform: rotate(25deg);
+  pointer-events: none;
+}
+
+/* hover = glowing badge */
+.achievement:hover {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 6px 20px rgba(255, 215, 0, 0.6), 
+    inset 0 1px 6px rgba(255, 255, 255, 0.4);
+  transform: scale(1.08);
+}
+
+/* achievement icon */
+.achievement img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 4px rgba(255,255,255,0.6));
+}
+/* -------------------------------
+   CARD STYLE (wood background)
+   ------------------------------- */
+.card {
+  background: url("assets/wood-tile.png") center/cover repeat;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+  color: #3b2a1a; /* deep brown text */
+}
+
+/* make headings a bit darker for contrast */
+.card h2,
+.card h3,
+.card h4 {
+  color: #2a1a0d; /* richer dark brown */
+  margin-top: 0;
+}
+/* -------------------------------
+   CONTENT LIBRARY BUTTONS ☕
+   ------------------------------- */
+.content-library .btn {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;   /* balanced capsule padding */
+  font-size: 0.95rem;       /* slightly smaller than before */
+  font-weight: 600;
+  border-radius: 9999px;    /* capsule shape */
+  background-color: #6f4e37; /* coffee brown */
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  text-decoration: none; /* just in case <a> is styled */
+}
+
+.content-library .btn:hover {
+  background-color: #8b5e3c; /* lighter roast coffee on hover */
+  transform: scale(1.05);
+}
+
+.content-library .btn:active {
+  transform: scale(0.97);
+}
+/* -------------------------------
+   GLOBAL BUTTON STYLE ☕
+   ------------------------------- */
+.btn {
+  display: inline-block;
+  padding: 0.55rem 1.3rem;   /* balanced capsule padding */
+  font-size: 0.95rem;       /* neat, not oversized */
+  font-weight: 600;
+  border-radius: 9999px;    /* capsule shape */
+  background-color: #6f4e37; /* coffee brown */
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  text-decoration: none; /* ensures <a> styled as button looks clean */
+}
+
+.btn:hover {
+  background-color: #8b5e3c; /* lighter roast on hover */
+  transform: scale(1.05);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+/* -------------------------------
+   FIXED CAPSULE BUTTON STYLE ☕
+   ------------------------------- */
+.btn {
+  display: inline-flex;          /* centers text perfectly */
+  align-items: center;           /* vertical centering */
+  justify-content: center;       /* horizontal centering */
+  padding: 0 1.2rem;             /* horizontal padding only */
+  height: 42px;                  /* fixed capsule height */
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 9999px;         /* capsule */
+  background-color: #6f4e37;     /* coffee brown */
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  text-decoration: none;
+  white-space: nowrap;           /* prevent text breaking */
+}
+
+.btn:hover {
+  background-color: #8b5e3c;     /* lighter roast hover */
+  transform: scale(1.05);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+/* STEM content library container fix */
+#library-list {
+  display: flex;
+  flex-wrap: wrap;          /* allow multiple rows */
+  justify-content: center;  /* center cards in the middle */
+  gap: 20px;                /* spacing between cards */
+  padding: 20px 0;          /* breathing space */
+}
+
+/* keep each card a nice consistent size */
+#library-list .card {
+  flex: 0 1 280px;          /* all cards same width but flexible */
+  max-width: 300px;         /* prevent overly large cards */
+}
+/* center the action buttons inside content library cards */
+#library-list .card .row.gap.mt {
+  display: flex;
+  justify-content: center;   /* center horizontally */
+  align-items: center;       /* keep vertical alignment */
+  gap: 12px;                 /* spacing between buttons */
+  margin-top: 1rem;
+}
+.hero {
+  position: relative;
+  background: url("assets/sky.png") no-repeat center top;
+  background-size: cover;
+  color: #2e2e2e;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.4); /* light transparent overlay */
+  z-index: 0;
+}
+
+.hero * {
+  position: relative;
+  z-index: 1; /* keeps text above overlay */
+}
