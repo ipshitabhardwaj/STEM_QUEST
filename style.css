@@ -788,21 +788,6 @@ body {
   position: relative;
   z-index: 1; /* keeps text above overlay */
 }
-.scroll-top {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #8B4513; /* brown */
-  color: white; /* arrow color stays white for contrast */
-  border: none;
-  padding: 10px 14px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 18px;
-  display: none;
-  z-index: 1000;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-}
 
 .scroll-top:hover {
   background-color: #A0522D; /* slightly lighter brown on hover */
@@ -933,4 +918,40 @@ body, .container, .card, .challenge {
 }
 .row.gap.mt {
   flex-direction: column;
+}
+
+/* Replace Landbot floating button icon */
+.landbot-floating-button {
+    background: url('robot.jpg') no-repeat center center !important;
+    background-size: cover !important;
+    width: 60px !important;   /* adjust size */
+    height: 60px !important;  /* adjust size */
+    border-radius: 50% !important; /* keep it circular */
+    left: 20px !important;    /* bottom-left positioning */
+    right: auto !important;
+    bottom: 20px !important;
+    z-index: 9999;
+}
+/* Scroll to top button - move to left bottom */
+#scrollTopBtn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px; /* move to left */
+  right: auto;
+  background-color: brown; /* keep your brown theme */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease;
+  z-index: 1000;
+}
+
+/* Hover effect */
+#scrollTopBtn:hover {
+  transform: scale(1.1);
 }
