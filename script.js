@@ -69,8 +69,10 @@ function renderLibrary(items) {
       </div>
     </div>
   `).join('');
+  // attach start-quest click handlers (keeps original behavior of scrolling)
   $$('.start-quest').forEach(btn=> btn.addEventListener('click', (e)=>{
     const id = btn.dataset.id;
+    // prefill a quest choice — for prototype just scroll to game and start quiz
     document.querySelector('#game')?.scrollIntoView({behavior:'smooth'});
   }));
 }
@@ -99,6 +101,7 @@ function applyFilters(){
 subIn?.addEventListener('change', applyFilters);
 
 // ----- Challenges (Dashboard new challenges)
+// ----- Challenges (Dashboard new challenges)
 function renderChallenges(list){
   const container = $('challenges-list');
   if (!container) return;
@@ -106,10 +109,20 @@ function renderChallenges(list){
     <div class="challenge">
       <div class="title">${c.title}</div>
       <p class="muted">${c.description}</p>
-      <a href="#game" class="btn btn-sm">Play</a>
+      <a href="#game" class="btn btn-sm start-quest" data-id="${c.id}">Play</a>
     </div>
   `).join('');
+
+  // attach click handlers to actually start subject-specific quests
+  $$('.challenge .start-quest').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = btn.dataset.id;
+      if (id) startQuestById(id);
+    });
+  });
 }
+
 
 // ----- Leaderboard
 function renderLeaderboard(list){
@@ -166,43 +179,141 @@ function renderAchievements(list) {
 }
 
 // ----- Quiz (interactive game)
+// NOTE: This section was adjusted so "Start Quest" starts subject-specific questions.
+// All other page logic and names remain the same to avoid breaking other code.
+
+// original fallback questions (kept for compatibility)
 const QUESTIONS = [
   { q:'A bridge stays up because forces are...', options:['Unbalanced','Balanced','Random'], correct:1 },
   { q:'What is 3/4 + 1/4?', options:['1/2','1','2/4'], correct:1 },
   { q:'A variable in code is best described as...', options:['A fixed number','A container for values','A math operation'], correct:1 },
 ];
+
+// subject-specific banks
+const QUESTIONS_BY_SUBJECT = {
+  Physics: [
+    { q:'A bridge stays up because forces are...', options:['Unbalanced','Balanced','Random'], correct:1 },
+    { q:'Which of these is a type of force?', options:['Friction','Color','Shape'], correct:0 },
+    { q:'Which law explains action and reaction?', options:["Newton’s 1st","Newton’s 2nd","Newton’s 3rd"], correct:2 },
+    { q:'Unit of force is...', options:['Newton','Joule','Watt'], correct:0 },
+    { q:'What is the acceleration due to gravity on Earth?', options:['9.8 m/s²','10 m/s²','8 m/s²'], correct:0 },
+    { q:'Energy of motion is called...', options:['Kinetic energy','Potential energy','Thermal energy'], correct:0 },
+    { q:'Which simple machine is a seesaw?', options:['Pulley','Lever','Inclined plane'], correct:1 },
+    { q:'Which wave needs a medium to travel?', options:['Light','Sound','Radio'], correct:1 },
+    { q:'What is the speed of light?', options:['3×10^8 m/s','3×10^6 m/s','1×10^8 m/s'], correct:0 },
+    { q:'Magnet attracts...', options:['Wood','Plastic','Iron'], correct:2 }
+  ],
+  Math: [
+    { q:'What is 3/4 + 1/4?', options:['1/2','1','2/4'], correct:1 },
+    { q:'Solve: 2x + 3 = 7. What is x?', options:['2','3','4'], correct:0 },
+    { q:'If ratio is 2:3 and total is 10, first part is?', options:['4','6','5'], correct:0 },
+    { q:'Square root of 81 is...', options:['8','9','7'], correct:1 },
+    { q:'What is 25% of 200?', options:['25','50','75'], correct:1 },
+    { q:'Simplify: 12 ÷ (3 × 2)', options:['2','6','4'], correct:0 },
+    { q:'Perimeter of a square of side 5 is...', options:['20','25','10'], correct:0 },
+    { q:'Value of π (approx) is...', options:['3.14','2.71','1.41'], correct:0 },
+    { q:'LCM of 4 and 6 is...', options:['24','12','8'], correct:1 },
+    { q:'Convert 0.5 into fraction', options:['1/2','1/3','2/5'], correct:0 }
+  ],
+  Coding: [
+    { q:'A variable in code is best described as...', options:['A fixed number','A container for values','A math operation'], correct:1 },
+    { q:'Which symbol starts a comment in JavaScript?', options:['#','//','<!--'], correct:1 },
+    { q:'Which keyword declares a variable in modern JS?', options:['var','let','both'], correct:2 },
+    { q:'Which loop runs at least once?', options:['for','while','do...while'], correct:2 },
+    { q:'Which of these is NOT a data type in JS?', options:['string','boolean','character'], correct:2 },
+    { q:'Which HTML tag links a JS file?', options:['<script>','<link>','<js>'], correct:0 },
+    { q:'Which function prints to the console?', options:['print()','console.log()','echo()'], correct:1 },
+    { q:'Arrays in JS are written with...', options:['{}','[]','()'], correct:1 },
+    { q:'Which operator is used for strict equality?', options:['==','====','=','!=='], correct:1 },
+    { q:'JS was first created in...', options:['1995','2000','1990'], correct:0 }
+  ],
+  Chemistry: [
+    { q:'Water turning into vapor is...', options:['Condensation','Evaporation','Freezing'], correct:1 },
+    { q:'Which state of matter has a definite volume but no fixed shape?', options:['Solid','Liquid','Gas'], correct:1 },
+    { q:'Chemical symbol of Sodium is...', options:['So','Na','S'], correct:1 },
+    { q:'pH value of neutral water is...', options:['7','0','14'], correct:0 },
+    { q:'Table salt is...', options:['NaCl','KCl','CaCl2'], correct:0 },
+    { q:'Which gas is needed for combustion?', options:['Oxygen','Nitrogen','Carbon dioxide'], correct:0 },
+    { q:'CO2 is...', options:['Carbon monoxide','Carbon dioxide','Calcium oxide'], correct:1 },
+    { q:'Acids taste...', options:['Sweet','Sour','Bitter'], correct:1 },
+    { q:'Which metal is liquid at room temp?', options:['Mercury','Iron','Aluminum'], correct:0 },
+    { q:'H2O2 is called...', options:['Hydrogen oxide','Hydrogen peroxide','Heavy water'], correct:1 }
+  ],
+  Biology: [
+    { q:'Plants produce energy using...', options:['Photosynthesis','Respiration','Digestion'], correct:0 },
+    { q:'Which structure contains genetic material?', options:['Mitochondria','Nucleus','Cell membrane'], correct:1 },
+    { q:'Basic unit of life is...', options:['Tissue','Cell','Organ'], correct:1 },
+    { q:'Human heart has how many chambers?', options:['2','3','4'], correct:2 },
+    { q:'Which blood cells fight infection?', options:['RBC','WBC','Platelets'], correct:1 },
+    { q:'Largest organ in human body?', options:['Liver','Skin','Brain'], correct:1 },
+    { q:'Which gas do humans exhale?', options:['Oxygen','Carbon dioxide','Nitrogen'], correct:1 },
+    { q:'Process of breaking food is...', options:['Respiration','Digestion','Photosynthesis'], correct:1 },
+    { q:'Fish breathe using...', options:['Lungs','Gills','Skin'], correct:1 },
+    { q:'DNA stands for...', options:['Deoxyribonucleic acid','Dynamic nucleotide acid','Double nuclear acid'], correct:0 }
+  ]
+};
+
+
+let activeQuestions = null; // current question set (subject-specific) or null -> fallback to QUESTIONS
 let qStep = 0, qChoice = null, qScore = 0;
+
+function startQuestById(questId) {
+  const quest = demoQuests.find(q => q.id === questId);
+  if (!quest) {
+    // fallback to generic if no quest found
+    activeQuestions = null;
+  } else {
+    const bank = QUESTIONS_BY_SUBJECT[quest.subject];
+    // clone bank to avoid accidental shared-state mutation
+    activeQuestions = bank ? bank.map(q => ({...q, options: [...q.options]})) : null;
+  }
+  // reset progress / score
+  qStep = 0; qChoice = null; qScore = 0;
+  // scroll to game and initialize
+  document.querySelector('#game')?.scrollIntoView({behavior:'smooth'});
+  initQuiz();
+}
+
 function initQuiz(){
   if (!$('question')) return;
-  $('total').textContent = QUESTIONS.length;
+  const use = (activeQuestions && activeQuestions.length) ? activeQuestions : QUESTIONS;
+  $('total').textContent = use.length;
+  // reset scores/date display
+  qScore = 0;
+  if ($('score')) $('score').textContent = qScore;
   renderQ();
-  $('submit')?.addEventListener('click', ()=>{
-    const cur = QUESTIONS[qStep];
+  // attach listeners (keeps same names so other code unaffected)
+  $('submit')?.addEventListener('click', ()=> {
+    const curSet = (activeQuestions && activeQuestions.length) ? activeQuestions : QUESTIONS;
+    const cur = curSet[qStep];
+    if (!cur) return;
     if (qChoice === cur.correct){ qScore++; if ($('score')) $('score').textContent = qScore; $('result').textContent = 'Correct! ✅'; }
     else { $('result').textContent = 'Not quite. ❌'; }
     qStep++;
     renderQ();
   });
-  $('clear')?.addEventListener('click', ()=>{
+  $('clear')?.addEventListener('click', ()=> {
     qChoice = null; $$('#options .btn').forEach(x=>x.classList.remove('btn-primary'));
     $('submit').disabled = true; $('clear').disabled = true; $('result').textContent = '';
   });
 }
+
 function renderQ(){
-  if (qStep >= QUESTIONS.length){
+  const curSet = (activeQuestions && activeQuestions.length) ? activeQuestions : QUESTIONS;
+  if (qStep >= curSet.length){
     $('question').textContent = 'Great job!';
-    $('options').innerHTML = `<div class="muted">You scored ${qScore} out of ${QUESTIONS.length}.</div>`;
+    $('options').innerHTML = `<div class="muted">You scored ${qScore} out of ${curSet.length}.</div>`;
     $('submit').disabled = true; $('clear').disabled = true;
     $('game-progress').style.width = '100%';
-    if (qScore >= Math.ceil(QUESTIONS.length*0.7)){
+    if (qScore >= Math.ceil(curSet.length*0.7)){
       setTimeout(()=> alert('🎉 Congrats — you earned a village reward!'), 300);
     }
     return;
   }
-  const cur = QUESTIONS[qStep];
+  const cur = curSet[qStep];
   $('question').textContent = cur.q;
   $('options').innerHTML = cur.options.map((o,i)=>`<button class="btn btn-alt" data-i="${i}">${o}</button>`).join('');
-  $('game-progress').style.width = (qStep/QUESTIONS.length*100) + '%';
+  $('game-progress').style.width = (qStep/curSet.length*100) + '%';
   $('submit').disabled = true; $('clear').disabled = true; qChoice = null; $('result').textContent = '';
   $$('#options .btn').forEach(b=> b.addEventListener('click', ()=>{
     $$('#options .btn').forEach(x=>x.classList.remove('btn-primary'));
@@ -211,6 +322,16 @@ function renderQ(){
     $('submit').disabled = false; $('clear').disabled = false;
   }));
 }
+
+// Ensure Start Quest buttons actually launch subject-specific quests
+// (this sits in addition to the renderLibrary handler which scrolls to #game)
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('.start-quest');
+  if (!el) return;
+  e.preventDefault();
+  const id = el.dataset.id;
+  if (id) startQuestById(id);
+});
 
 // ----- Progress charts (demo)
 function renderProgressCharts(){
@@ -304,3 +425,13 @@ function initPage(){
 
 // run init when DOM ready
 document.addEventListener('DOMContentLoaded', initPage);
+
+const scrollBtn = $('scrollTopBtn');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 200) scrollBtn.style.display = 'block';
+  else scrollBtn.style.display = 'none';
+});
+
+scrollBtn.addEventListener('click', () => {
+  window.scrollTo({top: 0, behavior: 'smooth'});
+});
